@@ -9,7 +9,7 @@ class UserEntity
 
     public function __construct(Email $email, Password $password)
     {
-        $this->email =$email;
+        $this->email = $email;
         $this->password = $password;
     }
 
@@ -28,4 +28,24 @@ class UserEntity
     {
         return $this->email;
     }
+
+    public static function fromArray(UserEntity $data): self
+    {
+        return new self(
+            new Email($data['email']),
+            new Password($data['password']
+            )
+        );
+    }
+
+    public function login(Password $password): bool
+    {
+        if ($password->getPassword() == $this->password) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

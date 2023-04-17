@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Src\User\Application;
 
 use Src\User\Domain\Contracts\UserRepository;
+use Src\User\Domain\Email;
 use Src\User\Domain\UserEntity;
-use Src\User\Domain\UserName;
+
 
 final class UserSearchUseCase
 {
@@ -18,9 +19,16 @@ final class UserSearchUseCase
         $this->repository = $repository;
     }
 
-    public function execute(string $userName): ?UserEntity
+    public function execute(string $email): ?UserEntity
     {
-       return $this->repository->search(new UserName($userName));
+        $data = $this->repository->search(new Email($email));
 
+        $this->ensureExists($data);
+
+        return UserEntity::fromArray($data);
+    }
+
+    private function ensureExists(UserEntity $data): void
+    {
     }
 }

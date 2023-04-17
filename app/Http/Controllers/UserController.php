@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Src\User\Application\UserLoginUseCase;
+use Src\User\Infrastructure\EloquentUserRepository;
 
 class UserController extends Controller
 {
@@ -12,6 +12,9 @@ class UserController extends Controller
      */
     public function index(): string
     {
-        return "";
+        $login = new UserLoginUseCase(new EloquentUserRepository());
+        $login->execute("samuel005@gmail.com","s");
+
+        return "22";
     }
 }
