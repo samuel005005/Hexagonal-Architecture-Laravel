@@ -23,11 +23,12 @@ final class EloquentUserRepository implements UserRepository
     {
 
         try {
-            $row = $this->model->query()->findOrFail(['email' => $email->getEmail()]);
+            $row = $this->model->query()->where('name','=','Samuel')->get();
+            var_dump($row->value('name'));die;
         } catch (\Exception $exception) {
             var_dump($exception->getMessage());die;
         }
 
-        return new UserEntity($row->get('email'), $row->get('password'));
+        return new UserEntity($row->getAttribute('email'), $row->getAttribute('password'));
     }
 }
