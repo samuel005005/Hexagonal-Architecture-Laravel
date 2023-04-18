@@ -1,12 +1,14 @@
 <?php
 
-namespace Src\User\Domain;
+namespace Src\User\Domain\ValueObjects;
 
-class Password
+use Src\User\Domain\Exceptions\PasswordLengthInvalidException;
+
+final class UserPassword
 {
     private string $password;
 
-    public function __construct(string $password)
+    public function __construct(?string $password)
     {
         $this->setPassword($password);
     }
@@ -20,10 +22,14 @@ class Password
     }
 
     /**
-     * @param string $password
+     * @param string|null $password
      */
-    private function setPassword(string $password): void
+    private function setPassword(?string $password): void
     {
+        if (is_null($password)) {
+            throw  new PasswordLengthInvalidException("Password is required");
+        }
+
         if ($password < 5) {
             throw  new PasswordLengthInvalidException("Password length Invalid");
         }

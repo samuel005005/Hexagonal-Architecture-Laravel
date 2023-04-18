@@ -2,10 +2,10 @@
 
 namespace Src\User\Domain\Contracts;
 
-use Src\User\Domain\Email;
 use Src\User\Domain\UserEntity;
+use Src\User\Domain\ValueObjects\UserEmail;
 
 interface UserRepository
 {
-    public function search(Email $email): UserEntity;
+    public function search(UserEmail $email): UserEntity;
 }

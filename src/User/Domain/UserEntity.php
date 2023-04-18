@@ -2,50 +2,100 @@
 
 namespace Src\User\Domain;
 
+use Serializable;
+use Src\User\Domain\Exceptions\UserNotFoundException;
+use Src\User\Domain\ValueObjects\UserEmail;
+use Src\User\Domain\ValueObjects\UserEmailVerifiedDate;
+use Src\User\Domain\ValueObjects\UserPassword;
+use Src\User\Domain\ValueObjects\UserRememberToken;
+
 class UserEntity
 {
-    private Email $email;
-    private Password $password;
+    private UserEmail $email;
+    private UserPassword $password;
+    private UserEmailVerifiedDate $emailVerifiedDate;
+    private UserRememberToken $rememberToken;
 
-    public function __construct(Email $email, Password $password)
+    public function __construct(
+        UserEmail             $email,
+        UserEmailVerifiedDate $emailVerifiedDate,
+        UserPassword          $password,
+        UserRememberToken     $rememberToken)
     {
+
         $this->email = $email;
+        $this->emailVerifiedDate = $emailVerifiedDate;
         $this->password = $password;
+        $this->rememberToken = $rememberToken;
     }
 
     /**
-     * @return Password
+     * @return UserPassword
      */
-    public function getPassword(): Password
+    public function getPassword(): UserPassword
     {
         return $this->password;
     }
 
     /**
-     * @return Email
+     * @return UserEmailVerifiedDate
      */
-    public function getEmail(): Email
+    public function emailVerifiedDate(): UserEmailVerifiedDate
+    {
+        return $this->emailVerifiedDate;
+    }
+
+    /**
+     * @return UserEmail
+     */
+    public function getEmail(): UserEmail
     {
         return $this->email;
     }
 
-    public static function fromArray(UserEntity $data): self
+    /**
+     * @return UserRememberToken
+     */
+    public function rememberToken(): UserRememberToken
+    {
+        return $this->rememberToken;
+    }
+
+    public static function fromArray(array $data): self
     {
         return new self(
-            new Email($data['email']),
-            new Password($data['password']
+            new UserEmail($data['email']),
+            new UserEmailVerifiedDate($data['emailVerifiedDate']),
+            new UserPassword($data['password']),
+            new UserRememberToken($data['rememberToken'],
             )
         );
     }
 
-    public function login(Password $password): bool
+
+    public function login(?UserPassword $password): self
     {
-        if ($password->getPassword() == $this->password) {
-            return true;
+        if ($password->getPassword() == $this->password->getPassword()) {
+            return $this;
         }
 
-        return false;
+        throw new  UserNotFoundException("User or password incorrect");
     }
 
+    public static function create(
+        UserEmail             $email,
+        UserEmailVerifiedDate $emailVerifiedDate,
+        UserPassword          $password,
+        UserRememberToken     $rememberToken
+    ): UserEntity
+    {
+        return new self($email, $emailVerifiedDate, $password, $rememberToken);
+    }
 
+    public function _toArray(): array
+    {
+        return [
+            'email' => $this->email->getEmail()
+        ];
+    }
 }

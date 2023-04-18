@@ -101,7 +101,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Password Confirmation Timeout
+    | UserPassword Confirmation Timeout
     |--------------------------------------------------------------------------
     |
     | Here you may define the amount of seconds before a password confirmation

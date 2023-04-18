@@ -6,7 +6,8 @@ namespace Src\User\Application;
 
 
 use Src\User\Domain\Contracts\UserRepository;
-use Src\User\Domain\Password;
+use Src\User\Domain\UserEntity;
+use Src\User\Domain\ValueObjects\UserPassword;
 
 final class UserLoginUseCase
 {
@@ -20,11 +21,11 @@ final class UserLoginUseCase
         $this->finderUser = new UserSearchUseCase($this->repository);
     }
 
-    public function execute(string $email, string $password): void
+    public function execute(?string $email, ?string $password): UserEntity
     {
         $user = $this->finderUser->execute($email);
 
-        $user->login(new Password($password));
+        return $user->login(new UserPassword($password));
 
     }
 
