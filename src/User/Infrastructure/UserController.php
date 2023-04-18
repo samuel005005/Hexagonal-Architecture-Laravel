@@ -18,7 +18,6 @@ class UserController
 
     public function execute(Request $request): UserEntity
     {
-
         $userEmail = $request->input('email');
         $userPassword = $request->input('password');
 
