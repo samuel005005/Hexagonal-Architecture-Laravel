@@ -5,6 +5,7 @@ namespace Src\User\Infrastructure;
 use Illuminate\Http\Request;
 use Src\User\Application\UserLoginUseCase;
 use Src\User\Domain\Contracts\UserRepository;
+use Src\User\Domain\UserEntity;
 
 class UserController
 {
@@ -15,7 +16,7 @@ class UserController
         $this->repository = $repository;
     }
 
-    public function execute(Request $request): \Src\User\Domain\UserEntity
+    public function execute(Request $request): UserEntity
     {
 
         $userEmail = $request->input('email');
