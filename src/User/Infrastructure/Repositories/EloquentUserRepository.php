@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Src\User\Infrastructure\Repositories;
 
 use App\Models\User;
+use Src\Shared\Domain\Exceptions\HttpException;
 use Src\User\Domain\Contracts\UserRepository;
+use Src\User\Domain\Exceptions\UserNotFound;
 use Src\User\Domain\UserEntity;
 use Src\User\Domain\ValueObjects\UserEmail;
 use Src\User\Domain\ValueObjects\UserEmailVerifiedDate;
@@ -24,7 +26,12 @@ final class EloquentUserRepository implements UserRepository
 
     public function search(UserEmail $email): UserEntity
     {
-        $row = $this->model->query()->where('email', '=', $email->getEmail())->firstOrFail();
+        $row = $this->model->query()->where('email', '=', $email->getEmail())->first();
+
+        if (is_null($row)) {
+           throw new UserNotFound(404, "User not found");
+        }
+
         return UserEntity::create(
             new UserName ($row->getAttribute('name')),
             new UserEmail($row->getAttribute('email')),

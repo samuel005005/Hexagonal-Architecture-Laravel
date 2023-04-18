@@ -21,12 +21,7 @@ final class UserSearchUseCase
 
     public function execute(?string $email): ?UserEntity
     {
-        $data = $this->repository->search(new UserEmail($email));
-        $this->ensureExists($data);
-        return $data;
+        return $this->repository->search(new UserEmail($email));
     }
 
-    private function ensureExists(UserEntity $data): void
-    {
-    }
 }
