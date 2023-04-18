@@ -2,7 +2,9 @@
 
 namespace Src\User\Domain\Exceptions;
 
-class UserNotFoundException extends \DomainException
+use Src\Shared\Domain\Exceptions\HttpException;
+
+class UserNotFoundException extends HttpException
 {
 
 }

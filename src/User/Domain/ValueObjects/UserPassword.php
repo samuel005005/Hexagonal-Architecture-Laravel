@@ -27,11 +27,11 @@ final class UserPassword
     private function setPassword(?string $password): void
     {
         if (is_null($password)) {
-            throw  new PasswordLengthInvalidException("Password is required");
+            throw  new PasswordLengthInvalidException(400,"Password is required");
         }
 
         if ($password < 5) {
-            throw  new PasswordLengthInvalidException("Password length Invalid");
+            throw  new PasswordLengthInvalidException(400,"Password length Invalid");
         }
         $this->password = $password;
     }

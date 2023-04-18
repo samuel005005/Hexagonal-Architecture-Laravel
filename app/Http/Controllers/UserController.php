@@ -3,53 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use InvalidArgumentException;
-use Src\User\Application\UserLoginUseCase;
-use Src\User\Domain\Contracts\UserRepository;
-use Src\User\Domain\Exceptions\EmailNullException;
-use Src\User\Domain\Exceptions\PasswordLengthInvalidException;
-use Src\User\Domain\Exceptions\UserNotFoundException;
+use Src\Shared\Domain\Exceptions\HttpException;
 
 
 class UserController extends Controller
 {
 
-    private UserRepository $repository;
+    private \Src\User\Infrastructure\UserController $userController;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(\Src\User\Infrastructure\UserController $userController)
     {
-        $this->repository = $repository;
+        $this->userController = $userController;
     }
 
     public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $userEmail = $request->input('email');
-            $userPassword = $request->input('password');
-
-            $login = new UserLoginUseCase($this->repository);
-            $user = $login->execute($userEmail, $userPassword);
-
+            $user = $this->userController->execute($request);
+            return response()->json($user, 200);
+        } catch (HttpException $exception) {
             return response()->json(
                 array(
                     "Response" => true,
-                    "Data" => $user->_toArray()
-                ), 200);
-
-        } catch (   EmailNullException|
-                    PasswordLengthInvalidException|
-                    InvalidArgumentException|
-                    UserNotFoundException $exception) {
-            return response()->json(array(
-                'Response' => false,
-                'Msg' => $exception->getMessage()
-            ), 400);
+                    "Msj" => $exception->getMessage()
+                ), $exception->getStatusCode());
         } catch (\Exception $exception) {
-            return response()->json(array(
-                'Response' => false,
-                'Msg' => $exception->getMessage()
-            ), 500);
+            return response()->json(
+                array(
+                    "Response" => true,
+                    "Msj" => $exception->getMessage()
+                ), 500);
         }
-
     }
 }

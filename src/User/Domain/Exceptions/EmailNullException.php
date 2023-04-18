@@ -2,7 +2,9 @@
 
 namespace Src\User\Domain\Exceptions;
 
-class EmailNullException extends \DomainException
+use Src\Shared\Domain\Exceptions\HttpException;
+
+class EmailNullException extends HttpException
 {
 
 }

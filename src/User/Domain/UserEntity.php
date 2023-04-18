@@ -79,7 +79,7 @@ class UserEntity
             return $this;
         }
 
-        throw new  UserNotFoundException("User or password incorrect");
+        throw new  UserNotFoundException(404,"User or password incorrect");
     }
 
     public static function create(

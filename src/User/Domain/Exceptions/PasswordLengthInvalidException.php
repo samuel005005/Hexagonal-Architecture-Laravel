@@ -2,7 +2,9 @@
 
 namespace Src\User\Domain\Exceptions;
 
-class PasswordLengthInvalidException extends \DomainException
+use Src\Shared\Domain\Exceptions\HttpException;
+
+class PasswordLengthInvalidException extends HttpException
 {
 
 }

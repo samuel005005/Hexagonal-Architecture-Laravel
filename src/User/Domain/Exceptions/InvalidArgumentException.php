@@ -2,7 +2,9 @@
 
 namespace Src\User\Domain\Exceptions;
 
-class InvalidArgumentException extends \DomainException
+use Src\Shared\Domain\Exceptions\HttpException;
+
+class InvalidArgumentException extends HttpException
 {
 
 }
