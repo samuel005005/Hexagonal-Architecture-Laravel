@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Src\User\Domain\Contracts\UserRepository;
 use Src\User\Infrastructure\Repositories\EloquentUserRepository;
@@ -17,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
             UserRepository::class,
             EloquentUserRepository::class
         );
+
     }
 
     /**
@@ -24,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Schema::defaultStringLength(191);
     }
 }

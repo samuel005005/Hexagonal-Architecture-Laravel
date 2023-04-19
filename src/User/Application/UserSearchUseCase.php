@@ -19,7 +19,7 @@ final class UserSearchUseCase
         $this->repository = $repository;
     }
 
-    public function execute(?string $email): ?UserEntity
+    public function __invoke(?string $email): ?UserEntity
     {
         return $this->repository->search(new UserEmail($email));
     }

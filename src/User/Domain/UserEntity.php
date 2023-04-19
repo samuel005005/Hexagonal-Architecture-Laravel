@@ -100,16 +100,6 @@ class UserEntity
         );
     }
 
-
-    public function login(?UserPassword $password): self
-    {
-        if ($password->getPassword() == $this->password->getPassword()) {
-            return $this;
-        }
-
-        throw new  UserNotFoundException(404, "User or password incorrect");
-    }
-
     public static function create(
         UserName              $name,
         UserEmail             $email,
