@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\User\AuthController;
+use App\Http\Controllers\User\CreateUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,20 +14,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-
-Route::get('/notAuthorized', [AuthController::class, 'notAuthorized'])->name('notAuthorized');
-
-Route::controller(AuthController::class)->group(function () {
-    Route::post('register', 'register');
-    Route::post('login', 'login');
-});
-
-Route::middleware('auth:sanctum')->group( function () {
+Route::prefix('user')->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::post('logout', 'logout');
-    });
+        Route::post('/login', 'login');
+        Route::get('/notAuthorized', 'notAuthorized')->name('notAuthorized');
+    })->prefix('user');
+    Route::post('/create', [CreateUserController::class, 'register']);
+
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('/logout', 'logout');
+        Route::get('/me', 'me');
+    })->middleware('auth:sanctum');
 });
+

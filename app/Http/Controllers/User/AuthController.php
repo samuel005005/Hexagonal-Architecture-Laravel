@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ErrorResponseResource;
 use App\Http\Resources\GeneralResponseResource;
 use App\Http\Resources\LoginResource;
-use App\Http\Resources\ErrorResponseResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
 use Src\Shared\Domain\Exceptions\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,35 +22,32 @@ class AuthController extends Controller
         $this->userController = $userController;
     }
 
-    public function register(Request $request): JsonResponse
-    {
-        $user = new LoginResource($this->userController->__invoke($request));
-        return response()->json($user, Response::HTTP_OK)->withoutCookie($cookie);
-    }
-
     public function login(Request $request): JsonResponse
     {
-        try {
-            $user = new LoginResource($this->userController->__invoke($request));
-            $cookie = cookie('token', $user->resource, 60 * 24);
-            return response()->json($user, Response::HTTP_OK)->withoutCookie($cookie);
-        } catch (HttpException $exception) {
-            return response()->json(
-                new ErrorResponseResource($exception->getMessage()), $exception->getStatusCode());
-        } catch (\Exception $exception) {
-            return response()->json(
-                new ErrorResponseResource($exception->getMessage()), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $user = new LoginResource($this->userController->__invoke($request));
+        $cookie = cookie('token', $user->resource, env('JWT_TTL'));
+        return response()->json($user, Response::HTTP_OK)->withoutCookie($cookie);
     }
 
     public function logout(): JsonResponse
     {
         $cookie = cookie()->forget('token');
-        return response()->json(new GeneralResponseResource(request()), Response::HTTP_OK)->withoutCookie($cookie);
+        return response()->json(new GeneralResponseResource('Successfully logged out'), Response::HTTP_OK)->withoutCookie($cookie);
     }
 
     public function notAuthorized(): JsonResponse
     {
         return response()->json(new ErrorResponseResource("Access is denied token is invalid"), Response::HTTP_UNAUTHORIZED);
     }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return JsonResponse
+     */
+    public function me(): JsonResponse
+    {
+        return response()->json(new UserResource(auth()->user()));
+    }
+
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GeneralResponseResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,12 @@ class GeneralResponseResource extends JsonResource
     {
         return [
             'status' => 'success',
-            'msjError' => $this->resource
+            'user' => [
+                'id' => $this->resource->id,
+                'name' => $this->resource->name,
+                'email' => $this->resource->email,
+            ]
         ];
     }
 }
+

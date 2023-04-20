@@ -22,19 +22,22 @@ class AuthController
         $this->finderUser = new UserSearchUseCase($this->repository);
     }
 
-    public function __invoke(Request $request):string
+    public function __invoke(Request $request): string
     {
 
-        $credentials = $request->only('email', 'password');
+        $email = $request->input('email');
+        $password = $request->input('password');
 
-        $this->finderUser->__invoke($credentials['email']);
+        $this->finderUser->__invoke($email);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = Auth::user();
-            return $user->createToken('token')->plainTextToken;
+            return $user->createToken('auth_token')->plainTextToken;
         }
 
         throw new  UserNotFoundException(Response::HTTP_UNAUTHORIZED, "Access is denied due to invalid credentials");
 
     }
+
+
 }

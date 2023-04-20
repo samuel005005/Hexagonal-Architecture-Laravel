@@ -2,7 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Http\Resources\ErrorResponseResource;
+use App\Http\Resources\ErrorServerResource;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Src\Shared\Domain\Exceptions\HttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -42,7 +47,24 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+
         });
+    }
+
+    public function render($request, Throwable $e): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|Response
+    {
+        if ($e instanceof HttpException) {
+            return response()->json(
+                new ErrorResponseResource($e->getMessage()), $e->getStatusCode());
+        }
+        if ($e instanceof Exception) {
+            return response()->json(
+                new ErrorServerResource($e->getMessage()), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $rendered = parent::render($request, $e);
+
+        return response()->json(
+            new ErrorResponseResource($e->getMessage()), $rendered->getStatusCode());
     }
 }

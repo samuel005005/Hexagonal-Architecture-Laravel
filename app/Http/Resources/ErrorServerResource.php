@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
-class GeneralResponseResource extends JsonResource
+class ErrorServerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,8 @@ class GeneralResponseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'status' => 'success',
-            'msjError' => $this->resource
+            'status' => 'failed',
+            'msjError' => 'An unexpected API error has occurred'
         ];
     }
 }
