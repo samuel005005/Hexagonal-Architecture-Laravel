@@ -9,7 +9,7 @@ use Src\User\Domain\Contracts\UserRepository;
 use Src\User\Domain\UserEntity;
 use Src\User\Domain\ValueObjects\UserPassword;
 
-final class UserLoginUseCase
+final class UserRegisterUseCase
 {
     private UserSearchUseCase $finderUser;
     private UserRepository $repository;
@@ -21,11 +21,9 @@ final class UserLoginUseCase
         $this->finderUser = new UserSearchUseCase($this->repository);
     }
 
-    public function execute(?string $email, ?string $password): UserEntity
+    public function __invoke(?string $email, ?string $password): UserEntity
     {
-        $user = $this->finderUser->execute($email);
-
-        return $user->login(new UserPassword($password));
+        $user = $this->finderUser->__invoke($email);
 
     }
 

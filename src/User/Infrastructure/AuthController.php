@@ -34,8 +34,7 @@ class AuthController
             return $user->createToken('token')->plainTextToken;
         }
 
-        throw new  UserNotFoundException(Response::HTTP_UNAUTHORIZED, "User or password incorrect");
-
+        throw new  UserNotFoundException(Response::HTTP_UNAUTHORIZED, "Access is denied due to invalid credentials");
 
     }
 }

@@ -19,15 +19,15 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
+Route::get('/notAuthorized', [AuthController::class, 'notAuthorized'])->name('notAuthorized');
 
 Route::controller(AuthController::class)->group(function () {
-//    Route::post('register', 'register');
+    Route::post('register', 'register');
     Route::post('login', 'login');
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-//    Route::post('refresh', 'AuthController@refresh');
-//    Route::post('me', 'AuthController@me');
+Route::middleware('auth:sanctum')->group( function () {
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('logout', 'logout');
+    });
 });

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GeneralResponseResource;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\ErrorResponseResource;
-use http\Cookie;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -20,6 +19,12 @@ class AuthController extends Controller
     {
 
         $this->userController = $userController;
+    }
+
+    public function register(Request $request): JsonResponse
+    {
+        $user = new LoginResource($this->userController->__invoke($request));
+        return response()->json($user, Response::HTTP_OK)->withoutCookie($cookie);
     }
 
     public function login(Request $request): JsonResponse
@@ -43,9 +48,8 @@ class AuthController extends Controller
         return response()->json(new GeneralResponseResource(request()), Response::HTTP_OK)->withoutCookie($cookie);
     }
 
-    public function test(): JsonResponse
+    public function notAuthorized(): JsonResponse
     {
-        $cookie = cookie()->forget('token');
-        return response()->json("All OK", Response::HTTP_OK)->withoutCookie($cookie);
+        return response()->json(new ErrorResponseResource("Access is denied token is invalid"), Response::HTTP_UNAUTHORIZED);
     }
 }
