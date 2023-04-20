@@ -2,16 +2,16 @@
 
 namespace Src\User\Domain;
 
-use Serializable;
-use Src\User\Domain\Exceptions\UserNotFoundException;
 use Src\User\Domain\ValueObjects\UserEmail;
 use Src\User\Domain\ValueObjects\UserEmailVerifiedDate;
+use Src\User\Domain\ValueObjects\UserId;
 use Src\User\Domain\ValueObjects\UserName;
 use Src\User\Domain\ValueObjects\UserPassword;
 use Src\User\Domain\ValueObjects\UserRememberToken;
 
 class UserEntity
 {
+    private UserId $id;
     private UserName $name;
     private UserEmail $email;
     private UserPassword $password;
@@ -19,17 +19,27 @@ class UserEntity
     private UserRememberToken $rememberToken;
 
     public function __construct(
+        UserId                $id,
         UserName              $name,
         UserEmail             $email,
         UserEmailVerifiedDate $emailVerifiedDate,
         UserPassword          $password,
         UserRememberToken     $rememberToken)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->email = $email;
         $this->emailVerifiedDate = $emailVerifiedDate;
         $this->password = $password;
         $this->rememberToken = $rememberToken;
+    }
+
+    /**
+     * @return UserId
+     */
+    public function getId(): UserId
+    {
+        return $this->id;
     }
 
     /**
@@ -91,16 +101,18 @@ class UserEntity
     public static function fromArray(array $data): self
     {
         return new self(
+            new UserId($data['id']),
             new UserName($data['name']),
             new UserEmail($data['email']),
-            new UserEmailVerifiedDate($data['emailVerifiedDate']),
+            new UserEmailVerifiedDate($data['email_verified_at']),
             new UserPassword($data['password']),
-            new UserRememberToken($data['rememberToken'],
+            new UserRememberToken($data['remember_token'],
             )
         );
     }
 
     public static function create(
+        UserId                $id,
         UserName              $name,
         UserEmail             $email,
         UserEmailVerifiedDate $emailVerifiedDate,
@@ -108,12 +120,13 @@ class UserEntity
         UserRememberToken     $rememberToken
     ): UserEntity
     {
-        return new self($name, $email, $emailVerifiedDate, $password, $rememberToken);
+        return new self($id, $name, $email, $emailVerifiedDate, $password, $rememberToken);
     }
 
     public function _toArray(): array
     {
         return [
+            'id' => $this->id->getId(),
             'name' => $this->name->getName(),
             'email' => $this->email->getEmail()
         ];

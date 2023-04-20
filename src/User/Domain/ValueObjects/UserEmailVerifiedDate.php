@@ -10,11 +10,20 @@ final class UserEmailVerifiedDate
 
     public function __construct(?DateTime $emailVerifiedDate)
     {
-        $this->value = $emailVerifiedDate;
+        $this->setValue($emailVerifiedDate);
     }
 
     public function value(): ?DateTime
     {
         return $this->value;
+    }
+
+    /**
+     * @param DateTime|null $value
+     */
+    private function setValue(?DateTime $value): void
+    {
+        $this->value = $value;
+
     }
 }

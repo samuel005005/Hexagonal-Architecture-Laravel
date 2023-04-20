@@ -29,7 +29,7 @@ final class UserEmail
     public function setEmail(?string $email): void
     {
         if (is_null($email)) {
-            throw new EmailNullException(400, "The email is null");
+            throw new EmailNullException(400, "The email is required");
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

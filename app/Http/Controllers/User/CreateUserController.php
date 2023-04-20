@@ -23,15 +23,8 @@ class CreateUserController extends Controller
 
     public function register(Request $request): JsonResponse
     {
-        try {
-            $user = new UserResource($this->createUserController->__invoke($request));
-            return response()->json($user, Response::HTTP_OK);
-        } catch (HttpException $exception) {
-            return response()->json(
-                new ErrorResponseResource($exception->getMessage()), $exception->getStatusCode());
-        } catch (\Exception $exception) {
-            return response()->json(
-                new ErrorServerResource($exception->getMessage()), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $user = new UserResource($this->createUserController->__invoke($request));
+        return response()->json($user, Response::HTTP_OK);
+
     }
 }

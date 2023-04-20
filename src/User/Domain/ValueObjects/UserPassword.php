@@ -27,7 +27,7 @@ final class UserPassword
     private function setPassword(?string $password): void
     {
         if (is_null($password)) {
-            throw  new PasswordLengthInvalidException(400, "Password is required");
+            throw  new PasswordLengthInvalidException(400, "The password is required");
         }
 
         if (strlen($password) < 5) {

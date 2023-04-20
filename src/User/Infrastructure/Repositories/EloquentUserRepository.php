@@ -5,10 +5,10 @@ namespace Src\User\Infrastructure\Repositories;
 
 use App\Models\User;
 use Src\User\Domain\Contracts\UserRepository;
-use Src\User\Domain\Exceptions\UserFoundException;
 use Src\User\Domain\UserEntity;
 use Src\User\Domain\ValueObjects\UserEmail;
 use Src\User\Domain\ValueObjects\UserEmailVerifiedDate;
+use Src\User\Domain\ValueObjects\UserId;
 use Src\User\Domain\ValueObjects\UserName;
 use Src\User\Domain\ValueObjects\UserPassword;
 use Src\User\Domain\ValueObjects\UserRememberToken;
@@ -23,21 +23,22 @@ final class EloquentUserRepository implements UserRepository
         $this->model = new User();
     }
 
-    public function search(UserEmail $email): UserEntity
+    public function search(UserEmail $email): ?UserEntity
     {
         $row = $this->model->query()->where('email', '=', $email->getEmail())->first();
 
-        if (is_null($row)) {
-            throw new UserFoundException(404, "User not found");
+        if (!is_null($row)) {
+            return UserEntity::create(
+                new UserId($row->getAttribute('id')),
+                new UserName ($row->getAttribute('name')),
+                new UserEmail($row->getAttribute('email')),
+                new UserEmailVerifiedDate($row->getAttribute('email_verified_at')),
+                new UserPassword($row->getAttribute('password')),
+                new UserRememberToken($row->getAttribute('remember_token')),
+            );
         }
 
-        return UserEntity::create(
-            new UserName ($row->getAttribute('name')),
-            new UserEmail($row->getAttribute('email')),
-            new UserEmailVerifiedDate($row->getAttribute('email_verified_at')),
-            new UserPassword($row->getAttribute('password')),
-            new UserRememberToken($row->getAttribute('remember_token')),
-        );
+        return null;
     }
 
     public function save(
@@ -48,9 +49,16 @@ final class EloquentUserRepository implements UserRepository
         UserRememberToken     $userRememberToken
     ): UserEntity
     {
-        $this->model->setAttribute('name', $name);
-        $this->model->setAttribute('email', $email);
-        $this->model->setAttribute('email_verified_at', $userEmailVerifiedDate);
-        $this->model->save();
+        $data = [
+            'name' => $name->getName(),
+            'email' => $email->getEmail(),
+            'email_verified_at' => $userEmailVerifiedDate->value(),
+            'password' => $userPassword->getPassword(),
+            'remember_token' => $userRememberToken->value(),
+        ];
+
+        $created = $this->model->create($data);
+        $data['id'] = $created->getAttribute('id');
+        return UserEntity::fromArray($data);
     }
 }

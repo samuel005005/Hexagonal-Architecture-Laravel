@@ -11,8 +11,14 @@ use Src\User\Domain\ValueObjects\UserRememberToken;
 
 interface UserRepository
 {
-    public function search(UserEmail $email): UserEntity;
+    public function search(UserEmail $email): ?UserEntity;
 
-    public function save(UserName $name, UserEmail $email, UserEmailVerifiedDate $userEmailVerifiedDate, UserPassword $userPassword, UserRememberToken $userRememberToken): UserEntity;
+    public function save(
+        UserName $name,
+        UserEmail $email,
+        UserEmailVerifiedDate $userEmailVerifiedDate,
+        UserPassword $userPassword,
+        UserRememberToken $userRememberToken
+    ): UserEntity;
 
 }

@@ -6,7 +6,7 @@ use Src\User\Domain\Exceptions\InvalidArgumentException;
 
 final class UserId
 {
-    private int $value;
+    private int $id;
 
     /**
      * UserId constructor.
@@ -21,9 +21,9 @@ final class UserId
     /**
      * @return int
      */
-    public function getValue(): int
+    public function getId(): int
     {
-        return $this->value;
+        return $this->id;
     }
 
     /**
@@ -41,7 +41,7 @@ final class UserId
                 sprintf('<%s> does not allow the value <%s>.', self::class, $id)
             );
         }
-        $this->value = $id;
+        $this->id = $id;
     }
 
 }
