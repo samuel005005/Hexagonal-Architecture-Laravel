@@ -18,7 +18,6 @@ class AuthController extends Controller
 
     public function __construct(AuthInfrastructure $userController)
     {
-
         $this->userController = $userController;
     }
 
