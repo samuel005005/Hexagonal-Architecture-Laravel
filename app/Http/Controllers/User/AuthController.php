@@ -9,14 +9,14 @@ use App\Http\Resources\LoginResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Shared\Domain\Exceptions\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use \Src\User\Infrastructure\AuthController as AuthInfrastructure;
 
 class AuthController extends Controller
 {
-    private \Src\User\Infrastructure\AuthController $userController;
+    private AuthInfrastructure $userController;
 
-    public function __construct(\Src\User\Infrastructure\AuthController $userController)
+    public function __construct(AuthInfrastructure $userController)
     {
 
         $this->userController = $userController;

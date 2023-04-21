@@ -11,10 +11,11 @@ use Src\User\Domain\UserEntity;
 class CreateUserController
 {
     private UserRepository $repository;
-
+    private CreateUserUseCase $createUserUseCase;
     public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
+        $this->createUserUseCase = new CreateUserUseCase($this->repository);
     }
 
     public function __invoke(Request $request): UserEntity
@@ -25,8 +26,7 @@ class CreateUserController
         $userPassword = Hash::make($request->input('password'));
         $userRememberToken = null;
 
-        $createUserUseCase = new CreateUserUseCase($this->repository);
-        return $createUserUseCase->__invoke(
+        return $this->createUserUseCase->__invoke(
             $userName,
             $userEmail,
             $userEmailVerifiedDate,
