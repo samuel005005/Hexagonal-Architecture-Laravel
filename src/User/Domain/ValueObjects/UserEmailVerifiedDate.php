@@ -13,7 +13,7 @@ final class UserEmailVerifiedDate
         $this->setValue($emailVerifiedDate);
     }
 
-    public function value(): ?DateTime
+    public function getValue(): ?DateTime
     {
         return $this->value;
     }

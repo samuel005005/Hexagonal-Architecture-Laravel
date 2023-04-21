@@ -8,36 +8,36 @@ use Src\User\Domain\Exceptions\InvalidArgumentException;
 
 final class UserEmail
 {
-    private ?string $email;
+    private ?string $value;
 
-    public function __construct(?string $email)
+    public function __construct(?string $value)
     {
-        $this->setEmail($email);
+        $this->setEmail($value);
     }
 
     /**
      * @return string|null
      */
-    public function getEmail(): ?string
+    public function getValue(): ?string
     {
-        return $this->email;
+        return $this->value;
     }
 
     /**
-     * @param string|null $email
+     * @param string|null $value
      */
-    public function setEmail(?string $email): void
+    public function setEmail(?string $value): void
     {
-        if (is_null($email)) {
+        if (is_null($value)) {
             throw new EmailNullException(400, "The email is required");
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException(400, sprintf('<%s> does not allow the invalid email: <%s>.', UserEmail::class, $email)
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException(400, sprintf('<%s> does not allow the invalid email: <%s>.', UserEmail::class, $value)
             );
         }
 
-        $this->email = $email;
+        $this->value = $value;
     }
 
 }

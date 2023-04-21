@@ -25,7 +25,7 @@ final class EloquentUserRepository implements UserRepository
 
     public function search(UserEmail $email): ?UserEntity
     {
-        $row = $this->model->query()->where('email', '=', $email->getEmail())->first();
+        $row = $this->model->query()->where('email', '=', $email->getValue())->first();
 
         if (!is_null($row)) {
             return UserEntity::create(
@@ -50,11 +50,11 @@ final class EloquentUserRepository implements UserRepository
     ): UserEntity
     {
         $data = [
-            'name' => $name->getName(),
-            'email' => $email->getEmail(),
-            'email_verified_at' => $userEmailVerifiedDate->value(),
-            'password' => $userPassword->getPassword(),
-            'remember_token' => $userRememberToken->value(),
+            'name' => $name->getValue(),
+            'email' => $email->getValue(),
+            'email_verified_at' => $userEmailVerifiedDate->getValue(),
+            'password' => $userPassword->getValue(),
+            'remember_token' => $userRememberToken->getValue(),
         ];
 
         $created = $this->model->create($data);

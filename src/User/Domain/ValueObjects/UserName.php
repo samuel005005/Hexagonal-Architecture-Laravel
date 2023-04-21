@@ -7,26 +7,26 @@ use Src\User\Domain\Exceptions\NameNullException;
 
 class UserName
 {
-    private string $name;
+    private string $value;
 
-    public function __construct(string $name)
+    public function __construct(string $value)
     {
-        $this->setName($name);
+        $this->setName($value);
     }
 
-    public function getName(): string
+    public function getValue(): string
     {
-        return $this->name;
+        return $this->value;
     }
 
     /**
-     * @param string|null $name
+     * @param string|null $value
      */
-    private function setName(?string $name): void
+    private function setName(?string $value): void
     {
-        if (is_null($name)) {
+        if (is_null($value)) {
             throw new NameNullException(400, "The name is required");
         }
-        $this->name = $name;
+        $this->value = $value;
     }
 }

@@ -11,7 +11,7 @@ class UserRememberToken
         $this->value = $rememberToken;
     }
 
-    public function value(): ?string
+    public function getValue(): ?string
     {
         return $this->value;
     }

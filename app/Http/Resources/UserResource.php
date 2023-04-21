@@ -14,11 +14,12 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        var_dump($this->resource->getId());die;
         return [
             'status' => 'success',
             'user' => [
-                'id' => $this->resource->getId(),
+                'id' => $this->resource->getId()->getValue(),
+                'name' => $this->resource->getName()->getValue(),
+                'email' => $this->resource->getEmail()->getValue(),
             ]
         ];
     }

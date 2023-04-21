@@ -126,9 +126,9 @@ class UserEntity
     public function _toArray(): array
     {
         return [
-            'id' => $this->id->getId(),
-            'name' => $this->name->getName(),
-            'email' => $this->email->getEmail()
+            'id' => $this->id->getValue(),
+            'name' => $this->name->getValue(),
+            'email' => $this->email->getValue()
         ];
     }
 }

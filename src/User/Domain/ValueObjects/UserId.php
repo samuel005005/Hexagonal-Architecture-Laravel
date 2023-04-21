@@ -6,42 +6,42 @@ use Src\User\Domain\Exceptions\InvalidArgumentException;
 
 final class UserId
 {
-    private int $id;
+    private int $value;
 
     /**
      * UserId constructor.
-     * @param int $id
+     * @param int $value
      * @throws InvalidArgumentException
      */
-    public function __construct(int $id)
+    public function __construct(int $value)
     {
-        $this->setValue($id);
+        $this->setValue($value);
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getValue(): int
     {
-        return $this->id;
+        return $this->value;
     }
 
     /**
-     * @param int $id
+     * @param int $value
      */
-    private function setValue(int $id): void
+    private function setValue(int $value): void
     {
         $options = array(
             'options' => array(
                 'min_range' => 1,
             )
         );
-        if (!filter_var($id, FILTER_VALIDATE_INT, $options)) {
+        if (!filter_var($value, FILTER_VALIDATE_INT, $options)) {
             throw new InvalidArgumentException(
-                sprintf('<%s> does not allow the value <%s>.', self::class, $id)
+                sprintf('<%s> does not allow the value <%s>.', self::class, $value)
             );
         }
-        $this->id = $id;
+        $this->value = $value;
     }
 
 }

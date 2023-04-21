@@ -6,33 +6,33 @@ use Src\User\Domain\Exceptions\PasswordLengthInvalidException;
 
 final class UserPassword
 {
-    private string $password;
+    private string $value;
 
-    public function __construct(?string $password)
+    public function __construct(?string $value)
     {
-        $this->setPassword($password);
+        $this->setPassword($value);
     }
 
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getValue(): string
     {
-        return $this->password;
+        return $this->value;
     }
 
     /**
-     * @param string|null $password
+     * @param string|null $value
      */
-    private function setPassword(?string $password): void
+    private function setPassword(?string $value): void
     {
-        if (is_null($password)) {
+        if (is_null($value)) {
             throw  new PasswordLengthInvalidException(400, "The password is required");
         }
 
-        if (strlen($password) < 5) {
+        if (strlen($value) < 5) {
             throw  new PasswordLengthInvalidException(400, "Password length invalid");
         }
-        $this->password = $password;
+        $this->value = $value;
     }
 }
